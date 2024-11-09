@@ -9,11 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @SpringBootApplication
-/*
-@ComponentScan(basePackages = "com.krishna")
-@EnableAutoConfiguration
-@Configuration
- */
 @RestController
 public class Main {
     public static void main(String[] args) {
@@ -42,38 +37,4 @@ public class Main {
             Person person
     ) {
     }
-
-    /*
-    class GreetResponse {
-        public GreetResponse(String greet) {
-            this.greet = greet;
-        }
-
-        private final String greet;
-
-        public String getGreet() {
-            return greet;
-        }
-
-        @Override
-        public String toString() {
-            return "GreetResponse{" +
-                    "greet='" + greet + '\'' +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            GreetResponse response = (GreetResponse) o;
-            return Objects.equals(greet, response.greet);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(greet);
-        }
-    }
-   */
 }
