@@ -3,8 +3,7 @@ package com.krishna;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -38,6 +37,16 @@ public class Main {
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+    }
+
+    @GetMapping("api/v1/customers/{customerId}")
+    public Customer getCustomerById(
+            @PathVariable("customerId") Integer customerId) {
+        Customer customer = customers.stream()
+                .filter(c -> c.getId().equals(customerId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Customer with [%s] not found".formatted(customerId)));
+        return customer;
     }
 
     /*
