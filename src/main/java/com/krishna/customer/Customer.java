@@ -36,6 +36,12 @@ public class Customer {
         this.age = age;
     }
 
+    public Customer(String name, String email, Integer age) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+    }
+
     public Integer getId() {
         return id;
     }
