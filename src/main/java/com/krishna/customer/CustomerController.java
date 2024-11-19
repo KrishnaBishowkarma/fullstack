@@ -1,17 +1,16 @@
 package com.krishna.customer;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
 
-    
+
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
@@ -23,14 +22,20 @@ public class CustomerController {
     This is the same as below :
     */
 
-    @GetMapping("api/v1/customers")
+    @GetMapping
     public List<Customer> getCustomers() {
         return customerService.getAllCustomers();
     }
 
-    @GetMapping("api/v1/customers/{customerId}")
+    @GetMapping("{customerId}")
     public Customer getCustomer(
             @PathVariable("customerId") Integer customerId) {
         return customerService.getCustomer(customerId);
+    }
+
+    @PostMapping
+    public void registerCustomer(
+            @RequestBody CustomerRegistrationRequest request) {
+        customerService.addCustomer(request);
     }
 }
