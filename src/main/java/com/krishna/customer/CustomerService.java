@@ -1,5 +1,6 @@
 package com.krishna.customer;
 
+import com.krishna.exception.DuplicateResourceException;
 import com.krishna.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,23 @@ public class CustomerService {
     public Customer getCustomer(Integer id) {
         return customerDao.selectCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with [%s] not found".formatted(id)));
+    }
+
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+        // Check if email is taken
+        String email = customerRegistrationRequest.email();
+        if (customerDao.existsPersonWithEmail(email)) {
+            throw new DuplicateResourceException("Email already taken!");
+        }
+
+        // add customer
+        Customer customer = new Customer(
+                customerRegistrationRequest.name(),
+                customerRegistrationRequest.email(),
+                customerRegistrationRequest.age()
+        );
+        customerDao.insertCustomer(
+                customer
+        );
     }
 }
