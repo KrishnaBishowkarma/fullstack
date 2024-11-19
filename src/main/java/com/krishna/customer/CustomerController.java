@@ -32,4 +32,10 @@ public class CustomerController {
             @PathVariable("customerId") Integer customerId) {
         return customerService.getCustomer(customerId);
     }
+
+    @PostMapping
+    public void registerCustomer(
+            @RequestBody CustomerRegistrationRequest request) {
+        customerService.addCustomer(request);
+    }
 }
