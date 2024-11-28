@@ -32,7 +32,7 @@ public class Main {
             );
 
             List<Customer> customers = List.of(krishna, janaki);
-            customerRepository.saveAll(customers);
+//            customerRepository.saveAll(customers);
         };
     }
 }
