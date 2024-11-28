@@ -16,6 +16,15 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    out-of-order: true
+
+logging:
+  level:
+    org.flywaydb.core: DEBUG
 
   main:
     web-application-type: servlet
