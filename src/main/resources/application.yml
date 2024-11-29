@@ -15,7 +15,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
+    show-sql: false
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -24,7 +24,8 @@ spring:
 
 logging:
   level:
-    org.flywaydb.core: DEBUG
+    org.flywaydb.core: INFO
+  org.hibernate: WARN
 
   main:
     web-application-type: servlet
