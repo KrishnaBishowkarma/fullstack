@@ -25,7 +25,6 @@ spring:
 logging:
   level:
     org.flywaydb.core: DEBUG
-  org.hibernate: WARN
 
   main:
     web-application-type: servlet
