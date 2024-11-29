@@ -24,7 +24,7 @@ spring:
 
 logging:
   level:
-    org.flywaydb.core: INFO
+    org.flywaydb.core: DEBUG
   org.hibernate: WARN
 
   main:
