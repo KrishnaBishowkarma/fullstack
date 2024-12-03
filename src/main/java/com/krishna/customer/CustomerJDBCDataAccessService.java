@@ -1,6 +1,7 @@
 package com.krishna.customer;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,20 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public List<Customer> selectAllCustomers() {
-        return List.of();
+        var sql = """
+                SELECT id, name, email, age FROM customer
+                """;
+        RowMapper<Customer> customerRowMapper = (rs, rowNum) -> {
+            Customer customer = new Customer(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getInt("age")
+            );
+            return customer;
+        };
+        List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper);
+        return customers;
     }
 
     @Override
