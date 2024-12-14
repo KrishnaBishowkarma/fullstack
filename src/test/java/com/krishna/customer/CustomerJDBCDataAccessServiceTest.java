@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,19 +36,43 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         underTest.insertCustomer(customer);
 
         // WHEN
-        List<Customer> customers = underTest.selectAllCustomers();
+        List<Customer> actual = underTest.selectAllCustomers();
 
         // THEN
-        assertThat(customers).isNotEmpty();
+        assertThat(actual).isNotEmpty();
     }
 
     @Test
     void selectCustomerById() {
         // GIVEN
+        String email = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                faker.name().fullName(),
+                email,
+                faker.number().numberBetween(1, 100)
+        );
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
 
         // WHEN
+        Optional<Customer> actual = underTest.selectCustomerById(id);
 
         // THEN
+        assertThat(actual)
+                .isPresent()
+                .hasValueSatisfying(c -> {
+                    assertThat(c.getId()).isEqualTo(id);
+                    assertThat(c.getName()).isEqualTo(customer.getName());
+                    assertThat(c.getEmail()).isEqualTo(customer.getEmail());
+                    assertThat(c.getAge()).isEqualTo(customer.getAge());
+                });
     }
 
     @Test
