@@ -306,4 +306,41 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                     assertThat(c.getAge()).isEqualTo(newAge);
                 });
     }
+
+    @Test
+    void willUpdateAllPropertiesCustomer() {
+        // GIVEN
+        String email = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                faker.name().fullName(),
+                email,
+                faker.number().numberBetween(1, 100)
+        );
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        String newName = "dai";
+        String newEmail = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        int newAge = 30;
+
+        // When all properties are changed
+        Customer update = new Customer();
+        update.setId(id);
+        update.setName(newName);
+        update.setEmail(newEmail);
+        update.setAge(newAge);
+
+        underTest.updateCustomer(update);
+
+        // THEN
+        Optional<Customer> actual = underTest.selectCustomerById(id);
+        assertThat(actual).isPresent().hasValue(update);
+    }
 }
