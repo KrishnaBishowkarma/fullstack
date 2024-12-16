@@ -120,12 +120,68 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     }
 
     @Test
-    void deleteCustomerById() {
+    void existsPersonWithId() {
         // GIVEN
+        String email = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                faker.name().fullName(),
+                email,
+                faker.number().numberBetween(1, 100)
+        );
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
 
         // WHEN
+        boolean actual = underTest.existsPersonWithId(id);
 
         // THEN
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void existsPersonWithIdReturnFalseWhenDoesNotPresent() {
+        // GIVEN
+        int id = -1;
+
+        // WHEN
+        boolean actual = underTest.existsPersonWithId(id);
+
+        // THEN
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void deleteCustomerById() {
+        // GIVEN
+        String email = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                faker.name().fullName(),
+                email,
+                faker.number().numberBetween(1, 100)
+        );
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        // WHEN
+        underTest.deleteCustomerById(id);
+
+        // THEN
+        Optional<Customer> actual = underTest.selectCustomerById(id);
+        assertThat(actual).isNotPresent();
     }
 
     @Test
