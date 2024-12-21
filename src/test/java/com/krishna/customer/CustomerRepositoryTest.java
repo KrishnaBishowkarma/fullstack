@@ -9,6 +9,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CustomerRepositoryTest extends AbstractTestcontainers {
@@ -25,16 +30,33 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
     }
 
     @Test
-    void existsCustomerByEmail() {
+    void existsCustomerById() {
         // GIVEN
+        String email = faker.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                faker.name().fullName(),
+                email,
+                faker.number().numberBetween(1, 100)
+        );
+
+        underTest.save(customer);
+
+        int id = underTest.findAll()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
 
         // WHEN
+        var actual = underTest.existsCustomerById(id);
 
         // THEN
+        assertThat(actual).isTrue();
     }
 
     @Test
-    void existsCustomerById() {
+    void existsCustomerByEmail() {
         // GIVEN
 
         // WHEN
