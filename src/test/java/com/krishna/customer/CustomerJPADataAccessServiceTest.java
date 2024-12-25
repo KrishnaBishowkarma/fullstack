@@ -4,9 +4,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 class CustomerJPADataAccessServiceTest {
 
@@ -28,11 +30,11 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void selectAllCustomers() {
-        // GIVEN
-
         // WHEN
+        underTest.selectAllCustomers();
 
         // THEN
+        verify(customerRepository).findAll();
     }
 
     @Test
