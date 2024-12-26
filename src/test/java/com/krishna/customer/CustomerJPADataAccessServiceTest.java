@@ -40,10 +40,13 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void selectCustomerById() {
         // GIVEN
+        int id = 1;
 
         // WHEN
+        underTest.selectCustomerById(id);
 
         // THEN
+        verify(customerRepository).findById(id);
     }
 
     @Test
