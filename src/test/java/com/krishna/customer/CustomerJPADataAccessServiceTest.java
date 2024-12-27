@@ -68,10 +68,13 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void existsPersonWithEmail() {
         // GIVEN
+        String email = "dai@gmail.com";
 
         // WHEN
+        underTest.existsPersonWithEmail(email);
 
         // THEN
+        verify(customerRepository).existsCustomerByEmail(email);
     }
 
     @Test
