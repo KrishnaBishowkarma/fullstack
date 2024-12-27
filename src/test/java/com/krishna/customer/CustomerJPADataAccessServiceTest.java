@@ -92,10 +92,13 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void deleteCustomerById() {
         // GIVEN
+        int id = 1;
 
         // WHEN
+        underTest.deleteCustomerById(id);
 
         // THEN
+        verify(customerRepository).deleteById(id);
     }
 
     @Test
