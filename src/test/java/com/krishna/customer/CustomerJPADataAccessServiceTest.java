@@ -52,45 +52,68 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void insertCustomer() {
         // GIVEN
+        Customer customer = new Customer(
+                "bibechana",
+                "bibechana@gmail.com",
+                12
+        );
 
         // WHEN
+        underTest.insertCustomer(customer);
 
         // THEN
+        verify(customerRepository).save(customer);
     }
 
     @Test
     void existsPersonWithEmail() {
         // GIVEN
+        String email = "dai@gmail.com";
 
         // WHEN
+        underTest.existsPersonWithEmail(email);
 
         // THEN
+        verify(customerRepository).existsCustomerByEmail(email);
     }
 
     @Test
     void existsPersonWithId() {
         // GIVEN
+        int id = 1;
 
-        // WHEN
+        // WHEN\
+        underTest.existsPersonWithId(id);
 
         // THEN
+        verify(customerRepository).existsCustomerById(id);
     }
 
     @Test
     void deleteCustomerById() {
         // GIVEN
+        int id = 1;
 
         // WHEN
+        underTest.deleteCustomerById(id);
 
         // THEN
+        verify(customerRepository).deleteById(id);
     }
 
     @Test
     void updateCustomer() {
         // GIVEN
+        Customer customer = new Customer(
+                "bibechana",
+                "dai@gmail.com",
+                12
+        );
 
         // WHEN
+        underTest.updateCustomer(customer);
 
         // THEN
+        verify(customerRepository).save(customer);
     }
 }
