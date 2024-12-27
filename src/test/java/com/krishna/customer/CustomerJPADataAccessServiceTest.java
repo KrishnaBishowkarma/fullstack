@@ -104,9 +104,16 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void updateCustomer() {
         // GIVEN
+        Customer customer = new Customer(
+                "bibechana",
+                "dai@gmail.com",
+                12
+        );
 
         // WHEN
+        underTest.updateCustomer(customer);
 
         // THEN
+        verify(customerRepository).save(customer);
     }
 }
