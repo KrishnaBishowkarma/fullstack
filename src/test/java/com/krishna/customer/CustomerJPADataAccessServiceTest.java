@@ -52,10 +52,17 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void insertCustomer() {
         // GIVEN
+        Customer customer = new Customer(
+                "bibechana",
+                "bibechana@gmail.com",
+                12
+        );
 
         // WHEN
+        underTest.insertCustomer(customer);
 
         // THEN
+        verify(customerRepository).save(customer);
     }
 
     @Test
