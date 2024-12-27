@@ -80,10 +80,13 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void existsPersonWithId() {
         // GIVEN
+        int id = 1;
 
-        // WHEN
+        // WHEN\
+        underTest.existsPersonWithId(id);
 
         // THEN
+        verify(customerRepository).existsCustomerById(id);
     }
 
     @Test
