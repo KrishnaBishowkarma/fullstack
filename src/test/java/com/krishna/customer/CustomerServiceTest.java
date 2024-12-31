@@ -1,5 +1,6 @@
 package com.krishna.customer;
 
+import com.krishna.exception.DuplicateResourceException;
 import com.krishna.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -100,8 +101,31 @@ class CustomerServiceTest {
     }
 
     @Test
+    void willThrowWhenEmailExistsWhileAddingCustomer() {
+        // GIVEN
+        String email = "dai@gmail.com";
+
+        when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                "dai",
+                email,
+                12
+        );
+
+        // WHEN
+        assertThatThrownBy(() -> underTest.addCustomer(request))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage("Email already taken!");
+
+        // THEN
+        verify(customerDao, never()).insertCustomer(any());
+    }
+
+    @Test
     void deleteCustomerById() {
         // GIVEN
+
 
         // WHEN
 
