@@ -127,7 +127,7 @@ class CustomerServiceTest {
         // GIVEN
         int id = 10;
 
-        when(customerDao.existsPersonWithId(id)).thenReturn(false);
+        when(customerDao.existsPersonWithId(id)).thenReturn(true);
 
         // WHEN
         underTest.deleteCustomerById(id);
