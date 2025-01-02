@@ -155,9 +155,19 @@ class CustomerServiceTest {
     @Test
     void updateCustomer() {
         // GIVEN
+        int id = 10;
+        Customer customer = new Customer(
+                id,
+                "krishna",
+                "dai@gmail.com",
+                12
+        );
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         // WHEN
+        underTest.updateCustomer(id, new CustomerUpdateRequest("krishna dai", "bhai@gmail.com", 13));
 
         // THEN
+        verify(customerDao).updateCustomer(customer);
     }
 }
