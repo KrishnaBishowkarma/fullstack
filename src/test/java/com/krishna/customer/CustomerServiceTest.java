@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -153,7 +152,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void updateCustomer() {
+    void canUpdateAllCustomersProperties() {
         // GIVEN
         int id = 10;
         Customer customer = new Customer(
@@ -164,10 +163,23 @@ class CustomerServiceTest {
         );
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
+        String newEmail = "bhai@gmail.com";
+
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest("krishna dai", newEmail, 13);
+
+        when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(false);
+
         // WHEN
-        underTest.updateCustomer(id, new CustomerUpdateRequest("krishna dai", "bhai@gmail.com", 13));
+        underTest.updateCustomer(id, updateRequest);
 
         // THEN
-        verify(customerDao).updateCustomer(customer);
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
+        verify(customerDao).updateCustomer(customerArgumentCaptor.capture());
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(updateRequest.name());
+        assertThat(capturedCustomer.getAge()).isEqualTo(updateRequest.age());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(updateRequest.email());
     }
 }
