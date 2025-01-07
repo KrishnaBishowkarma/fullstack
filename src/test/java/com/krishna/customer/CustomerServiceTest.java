@@ -1,6 +1,7 @@
 package com.krishna.customer;
 
 import com.krishna.exception.DuplicateResourceException;
+import com.krishna.exception.RequestValidationException;
 import com.krishna.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -252,5 +253,55 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getName()).isEqualTo(customer.getName());
         assertThat(capturedCustomer.getAge()).isEqualTo(updateRequest.age());
         assertThat(capturedCustomer.getEmail()).isEqualTo(customer.getEmail());
+    }
+
+    @Test
+    void willThrowWhenTryingToUpdateCustomerEmailWhenAlreadyTaken() {
+        // GIVEN
+        int id = 10;
+        Customer customer = new Customer(
+                id,
+                "Krishna",
+                "dai@gmail.com",
+                12
+        );
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        String newEmail = "krishnadai@gmail.com";
+
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(null, newEmail, null);
+
+        when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(true);
+
+        // WHEN
+        assertThatThrownBy(() -> underTest.updateCustomer(id, updateRequest))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage("Email already taken!");
+
+        // THEN
+        verify(customerDao, never()).updateCustomer(any());
+    }
+
+    @Test
+    void willThrowWhenCustomerUpdateHasNoChanges() {
+        // GIVEN
+        int id = 10;
+        Customer customer = new Customer(
+                id,
+                "krishna",
+                "dai@gmail.com",
+                12
+        );
+        when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
+
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(customer.getName(), customer.getEmail(), customer.getAge());
+
+        // WHEN
+        assertThatThrownBy(() -> underTest.updateCustomer(id, updateRequest))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessage("No changes detected");
+
+        // THEN
+        verify(customerDao, never()).updateCustomer(any());
     }
 }
