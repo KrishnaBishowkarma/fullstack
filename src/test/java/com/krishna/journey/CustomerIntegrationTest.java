@@ -39,6 +39,15 @@ public class CustomerIntegrationTest {
         );
 
         // send a post request to /customers
+        webTestClient.post()
+                .uri("/api/v1/customers")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
         // get all customers
         // make sure customer is present
         // get customer by id
