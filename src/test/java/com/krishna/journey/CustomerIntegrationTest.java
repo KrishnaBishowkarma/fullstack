@@ -29,7 +29,7 @@ public class CustomerIntegrationTest {
         Faker faker = new Faker();
         Name fakerName = faker.name();
         String name = fakerName.fullName();
-        String email = fakerName.lastName() + UUID.randomUUID() + "@dai.com";
+        String email = fakerName.lastName() + " - " + UUID.randomUUID() + "@krishna-bk.com.np";
         int age = RANDOM.nextInt(1, 100);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
