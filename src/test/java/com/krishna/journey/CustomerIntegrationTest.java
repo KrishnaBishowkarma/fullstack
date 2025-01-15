@@ -61,8 +61,7 @@ public class CustomerIntegrationTest {
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<Customer>() {
-                })
+                .expectBodyList(new ParameterizedTypeReference<Customer>() {})
                 .returnResult()
                 .getResponseBody();
 
@@ -75,6 +74,23 @@ public class CustomerIntegrationTest {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .contains(expectedCustomer);
 
+
+        int id = allCustomers.stream()
+                .filter(customer -> customer.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        expectedCustomer.setId(id);
+
         // get customer by id
+        webTestClient.get()
+                .uri(CUSTOMER_URI + "/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(new ParameterizedTypeReference<Customer>() {})
+                .isEqualTo(expectedCustomer);
     }
 }
