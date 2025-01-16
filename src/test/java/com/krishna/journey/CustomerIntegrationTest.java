@@ -156,4 +156,9 @@ public class CustomerIntegrationTest {
                 .expectStatus()
                 .isNotFound();
     }
+
+    @Test
+    void canUpdateCustomer() {
+
+    }
 }
