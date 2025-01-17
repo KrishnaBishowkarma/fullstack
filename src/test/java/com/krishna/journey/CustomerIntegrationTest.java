@@ -242,5 +242,7 @@ public class CustomerIntegrationTest {
         Customer expected = new Customer(
                 id, newName, email, age
         );
+
+        assertThat(updatedCustomer).isEqualTo(expected);
     }
 }
