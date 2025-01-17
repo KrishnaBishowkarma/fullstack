@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import com.krishna.customer.Customer;
 import com.krishna.customer.CustomerRegistrationRequest;
+import com.krishna.customer.CustomerUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -159,6 +160,18 @@ public class CustomerIntegrationTest {
 
     @Test
     void canUpdateCustomer() {
+        // create a registration request
+        Faker faker = new Faker();
+        Name fakerName = faker.name();
 
+        String name = fakerName.fullName();
+        String email = fakerName.lastName() + " - " + UUID.randomUUID() + "@krishna-bk.com.np";
+        int age = RANDOM.nextInt(1, 100);
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                name,
+                email,
+                age
+        );
     }
 }
