@@ -173,5 +173,15 @@ public class CustomerIntegrationTest {
                 email,
                 age
         );
+
+        // send a post request to /customers
+        webTestClient.post()
+                .uri(CUSTOMER_URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
     }
 }
