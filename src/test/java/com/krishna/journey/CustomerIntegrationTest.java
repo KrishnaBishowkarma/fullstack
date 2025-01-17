@@ -227,5 +227,20 @@ public class CustomerIntegrationTest {
                 .exchange()
                 .expectStatus()
                 .isOk();
+
+        // get customer by id
+        Customer updatedCustomer = webTestClient.get()
+                .uri(CUSTOMER_URI + "/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(Customer.class)
+                .returnResult()
+                .getResponseBody();
+
+        Customer expected = new Customer(
+                id, newName, email, age
+        );
     }
 }
